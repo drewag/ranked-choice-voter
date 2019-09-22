@@ -66,6 +66,7 @@ body, html {
 
 .app {
   max-width:380px;
+  min-height:400px;
   width:100%;
   position:relative;
   margin:50px auto;
@@ -123,7 +124,7 @@ body, html {
   margin:0.5em 1.5em;
   margin-top:0;
   text-align:center;
-  font-size:16px;
+  font-size:14px;
   line-height:1.2em;
 }
 
@@ -138,6 +139,13 @@ body, html {
   color:#8A8A8A;
   font-size:14px;
   padding-top:0.5em;
+}
+
+.app .error p {
+  background-color:#C90035;
+  color:white;
+  padding:0.5em;
+  margin-top:0.5em;
 }
 
 .app input, .app textarea, .app button.submit {

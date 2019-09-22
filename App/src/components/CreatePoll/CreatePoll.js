@@ -1,7 +1,7 @@
 import React from 'react';
-//import './App.css';
+import RCVComponent from '../RCVComponent.js';
 
-class CreatePoll extends React.Component {
+class CreatePoll extends RCVComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,6 +44,7 @@ class CreatePoll extends React.Component {
   }
 
   submitHandler = event => {
+    this.startLoading("Creating Poll...");
     let finalChoices = this.nonEmptyChoices();
     const input = {
       name: this.state.name,
@@ -57,6 +58,7 @@ class CreatePoll extends React.Component {
       })
       .then(response => response.json())
       .then(json => {
+        this.stopLoading();
         const url = "/" + json.id;
         window.location.href = url;
       });
@@ -99,7 +101,7 @@ class CreatePoll extends React.Component {
           <input
             disabled={this.isValid() ? "" : "disabled"}
             type="submit"
-            value="Create"
+            value="Create Poll"
           />
       </form>
     );

@@ -1,7 +1,8 @@
 import React from 'react';
 import './PollResults.css';
+import RCVComponent from '../RCVComponent.js';
 
-class PollResults extends React.Component {
+class PollResults extends RCVComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,9 +20,25 @@ class PollResults extends React.Component {
         </div>
       )
     }
+    else if (this.state.notFound) {
+      return (
+        <div className="poll-not-found">
+          <h1>Poll Not Found</h1>
+          <p>No poll was found. Please double check that the link is correct.</p>
+        </div>
+      )
+    }
+    else if (this.state.error) {
+      return (
+        <div className="error">
+          <h1>{this.state.error.title}</h1>
+          <p>{this.state.error.alertMessage}</p>
+        </div>
+      )
+    }
     else {
       this.loadResults();
-      return <LoadingResults />
+      return null;
     }
   }
 
@@ -30,19 +47,32 @@ class PollResults extends React.Component {
   }
 
   loadResults() {
+    if (this.isLoading) {
+      return;
+    }
+    this.startLoading("Loading Poll Results...");
     fetch(this.generateURL())
-      .then(response => response.json())
-      .then(json => this.setState({
-        pollName: json.pollName,
-        result: json.result,
-      }));
+      .then(response => {
+        if (response.status == 404) {
+          return "notFound";
+        }
+        else {
+          return response.json()
+        }
+      })
+      .then(json => {
+        this.stopLoading();
+        if (json.pollName && json.result) {
+          this.setState({
+            pollName: json.pollName,
+            result: json.result,
+          })
+        }
+        else {
+          this.handleLoadingError(json);
+        }
+      });
   }
-}
-
-function LoadingResults(props) {
-    return (
-      <p>Loading results...</p>
-    )
 }
 
 function Winner(props) {

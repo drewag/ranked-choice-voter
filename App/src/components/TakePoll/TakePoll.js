@@ -1,4 +1,5 @@
 import React from 'react';
+import RCVComponent from '../RCVComponent.js';
 import update from 'immutability-helper';
 import './TakePoll.css';
 const arrayMove = require('array-move');
@@ -6,7 +7,7 @@ var Sortable = require('react-sortable-hoc');
 var SortableContainer = Sortable.SortableContainer;
 var SortableElement = Sortable.SortableElement;
 
-class TakePoll extends React.Component {
+class TakePoll extends RCVComponent {
   state = {};
 
   // Local State
@@ -40,20 +41,37 @@ class TakePoll extends React.Component {
   }
 
   loadPoll() {
+    if (this.isLoading) {
+      return
+    }
+    this.startLoading("Loading Poll...");
     fetch(this.generateURL())
-      .then(response => response.json())
+      .then(response => {
+        if (response.status == 404) {
+          return "notFound";
+        }
+        else {
+          return response.json()
+        }
+      })
       .then(json => {
-        this.setState({
-          name: json.name,
-          details: json.details,
-          availableChoices: json.choices,
-          rankings: [],
-          poll: json
-        })
+        this.stopLoading();
+        if (json.name && json.choices) {
+          this.setState({
+            name: json.name,
+            details: json.details,
+            availableChoices: json.choices,
+            rankings: [],
+          })
+        }
+        else {
+          this.handleLoadingError(json);
+        }
       });
   }
 
   submitPoll() {
+    this.startLoading("Submitting...");
     const rankings = this.state.rankings.map((choice, i) => {
       return choice.id
     });
@@ -62,55 +80,61 @@ class TakePoll extends React.Component {
         body: JSON.stringify(rankings),
       })
       .then(response => {
-        window.location.href = "/" + this.props.pollId + "/results";
+        this.stopLoading();
+        if (response.status == 201) {
+          window.location.href = "/" + this.props.pollId + "/results";
+        }
+        else {
+          this.handleErrorResponse(response);
+        }
       })
   }
 
   // Rendering
 
   render() {
-    if (this.state.poll) {
-      if (this.state.poll.name) {
-        return (
-          <div className="poll">
-            <h1>{this.state.name}</h1>
-            <p>{this.state.details}</p>
-            <AvailableChoices
-              choices={this.state.availableChoices}
-              makeChoice={this.makeChoice}
-            />
-            <Rankings
-              rankings={this.state.rankings}
-              moveChoice={this.moveChoice}
-            />
+    let content;
+    if (this.state.name) {
+      return (
+        <div className="poll">
+          <h1>{this.state.name}</h1>
+          <p>{this.state.details}</p>
+          <AvailableChoices
+            choices={this.state.availableChoices}
+            makeChoice={this.makeChoice}
+          />
+          <Rankings
+            rankings={this.state.rankings}
+            moveChoice={this.moveChoice}
+          />
 
-            <button
-              className="submit"
-              disabled={this.isValid() ? "" : "disabled"}
-              onClick={this.submitPoll.bind(this)}
-            >Submit</button>
-          </div>
-        )
-      }
-      else if (this.state.poll.details == "Status: NOT FOUND") {
-        return (
-          <p>Not Found</p>
-        )
-      }
-      else {
-        return (
-          <div className="error">
-            <h2>{this.state.poll.title}</h2>
-            <p>{this.state.poll.alertMessage}</p>
-          </div>
-        )
-      }
+          <button
+            className="submit"
+            disabled={this.isValid() ? "" : "disabled"}
+            onClick={this.submitPoll.bind(this)}
+          >Submit</button>
+        </div>
+      )
+    }
+    else if (this.state.notFound) {
+      return (
+        <div className="poll-not-found">
+          <h1>Poll Not Found</h1>
+          <p>No poll was found. Please double check that the link is correct.</p>
+        </div>
+      )
+    }
+    else if (this.state.error) {
+      return (
+        <div className="error">
+          <h1>{this.state.error.title}</h1>
+          <p>{this.state.error.alertMessage}</p>
+        </div>
+      )
     }
     else {
       this.loadPoll();
-      return (
-        <p>Loading...</p>
-      )
+      return null
     }
   }
 }

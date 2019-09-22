@@ -1,7 +1,6 @@
 .app .poll p {
   text-align:left;
-  margin:0;
-  margin-bottom:0.5em;
+  margin:1em 0;
 }
 
 .available-choices button {
