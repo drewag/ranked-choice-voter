@@ -1,0 +1,8 @@
+.past-polls ul {
+  list-style:disc inside;
+}
+
+.past-polls ul a {
+  padding:0.5em 0;
+  display:inline-block;
+}
