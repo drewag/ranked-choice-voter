@@ -68,9 +68,10 @@ class CreatePoll extends React.Component {
       <form id="createPoll" onSubmit={this.submitHandler}>
         <h1>Create a Poll</h1>
         <p>Start your own poll to help make a group decision with fixed choices.</p>
-        <label>Name</label>
+        <label>Question</label>
         <input type="text"
           name="name"
+          placeholder="The question to ask your poll takers"
           value={this.state.name}
           onChange={this.changeHandler}
         />
@@ -94,7 +95,11 @@ class CreatePoll extends React.Component {
             />
           ))}
 
-          <input disabled={this.isValid() ? "" : "disabled"} type="submit" value="Create" />
+          <input
+            disabled={this.isValid() ? "" : "disabled"}
+            type="submit"
+            value="Create"
+          />
       </form>
     );
   }

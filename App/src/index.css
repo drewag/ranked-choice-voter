@@ -48,6 +48,14 @@ body, html {
     background-repeat:repeat;
     color: #1d1d1f;
     width:100%;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }
 
 #root {
@@ -72,26 +80,6 @@ body, html {
   border-radius:3px;
 }
 
-@media all and (max-width:430px) {
-  body, html, #root {
-    background-color:transparent;
-    height:100%;
-  }
-
-  .app {
-    border-radius:0;
-    transform:none;
-    left:0;
-    top:0;
-    min-height:calc(100% - 120px);
-    padding-top:10px;
-    max-width:calc(100% - 24px);
-    max-width:calc(100% - 24px);
-    margin-top:0;
-  }
-}
-
-
 .app header {
   display:block;
   text-align:center;
@@ -101,7 +89,7 @@ body, html {
 
 .app footer {
   position:absolute;
-  bottom:0.2em;
+  bottom:-2em;
   left:50%;
   transform:translateX(-50%);
 }
@@ -111,6 +99,7 @@ body, html {
   padding:0.1em 0.2em;
   text-decoration:none;
   color:inherit;
+  border-radius:3px;
 }
 
 .app h1 {
@@ -119,6 +108,10 @@ body, html {
   color:#5B1547;
   font-size:24px;
   margin:0;
+}
+
+.app h2 {
+  margin-bottom:0.5em;
 }
 
 .app p {
@@ -136,7 +129,7 @@ body, html {
   padding-top:0.5em;
 }
 
-.app input, .app textarea {
+.app input, .app textarea, .app button.submit {
   border-radius:3px;
   border:1px solid #D8D8D8;
   font-size:14px;
@@ -150,7 +143,7 @@ body, html {
   border:1px solid #FFC400;
 }
 
-.app input[type="submit"] {
+.app input[type="submit"], .app button.submit {
   background-color:#FF5627;
   border:1px solid #D84511;
   color:white;
@@ -158,10 +151,35 @@ body, html {
   margin-top:0.5em;
 }
 
-.app input[type="submit"]:disabled {
+.app input[type="submit"]:disabled, .app button.submit:disabled {
   color:rgba(255,255,255,0.6);
+  background-color:#999;
+  border:1px solid #888;
 }
 
 .app textarea {
   resize: vertical;
+}
+
+@media all and (max-width:430px) {
+  body, html, #root {
+    background-color:transparent;
+    height:100%;
+  }
+
+  .app {
+    border-radius:0;
+    transform:none;
+    left:0;
+    top:0;
+    min-height:calc(100% - 120px);
+    padding-top:10px;
+    max-width:calc(100% - 24px);
+    max-width:calc(100% - 24px);
+    margin-top:0;
+  }
+
+  .app footer {
+    bottom:0.2em;
+  }
 }
