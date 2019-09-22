@@ -9,7 +9,7 @@ import Foundation
 import Swiftlier
 
 struct PollResult: Codable {
-    let winner: String
+    let rankings: [String]
     let rounds: [PollRound]
 
     init(choices: [PollChoice], answers: [PollAnswer]) throws {
@@ -20,8 +20,9 @@ struct PollResult: Codable {
 
         var rounds = [PollRound]()
 
-        while (rounds.last?.winningPercentage ?? 0) <= 0.5 {
+        while !activeChoices.isEmpty {
             // Tally votes
+            activeChoices = activeChoices.mapValues { ($0.0, 0) }
             for answer in answers {
                 for choiceId in answer.rankings {
                     guard var existing = activeChoices[choiceId] else {
@@ -46,11 +47,7 @@ struct PollResult: Codable {
             }
         }
 
-        guard let winner = rounds.last?.winner else {
-            throw GenericSwiftlierError("calcuatling winner", because: "no round created")
-        }
-
-        self.winner = winner.choice
+        self.rankings = rounds.map({$0.tallies.last?.choice ?? "No Choice"}).reversed()
         self.rounds = rounds
     }
 }

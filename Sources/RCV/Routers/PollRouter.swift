@@ -59,7 +59,11 @@ struct PollRouter: Router {
                     throw SwiftServeError(.notFound, "getting results", reason: "It could not be found.")
                 }
 
-                return (.ok, try service.results(for: poll))
+                let output = GetPollResults.Output(
+                    pollName: poll.name,
+                    result: try service.results(for: poll)
+                )
+                return (.ok, output)
             }),
         ]),
     ]

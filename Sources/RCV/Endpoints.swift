@@ -85,7 +85,10 @@ struct GetPollResults: OutEndpoint {
 
     let pollId: String
 
-    typealias Output = PollResult
+    struct Output: Codable {
+        let pollName: String
+        let result: PollResult
+    }
 
     var path: String {
         return "polls/\(pollId)/results"

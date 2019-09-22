@@ -1,0 +1,39 @@
+.results .winner .choice {
+  background-color:#FFC400;
+  padding:0.5em;
+  margin:0;
+  border-radius:3px;
+  text-align:center;
+}
+
+.results p {
+  text-align:left;
+  margin:0;
+}
+
+.results table {
+  width:100%;
+  border-collapse:collapse;
+  border-bottom:thin solid #E0E0E0;
+}
+
+.results .breakdown table tr:nth-child(even) {
+  background-color:#E0E0E0;
+}
+
+.results .full-ranking table tr:nth-child(odd) {
+  background-color:#E0E0E0;
+}
+
+.results table tr td, .results table tr th {
+  padding:0.5em;
+}
+
+.results table tr th {
+  font-style:italic;
+  padding-bottom:0.1em;
+}
+
+.results table .count, .results table .rank {
+  text-align:center;
+}

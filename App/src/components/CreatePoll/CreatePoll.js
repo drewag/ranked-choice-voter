@@ -16,7 +16,8 @@ class CreatePoll extends React.Component {
   }
 
   isValid() {
-    return this.nonEmptyChoices().length >= 3 && this.state.name.length > 0
+    return this.state.name.length > 0
+      && this.nonEmptyChoices().length >= 2
   }
 
   changeHandler = event => {
@@ -84,7 +85,7 @@ class CreatePoll extends React.Component {
           onChange={this.changeHandler}
         />
 
-        <label>Choices (minimum of 3)</label>
+        <label>Choices (minimum of 2)</label>
           {this.state.choices.map((choice, i) => (
             <input
               type="text"
