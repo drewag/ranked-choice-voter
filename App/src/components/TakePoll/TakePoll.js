@@ -93,7 +93,6 @@ class TakePoll extends RCVComponent {
   // Rendering
 
   render() {
-    let content;
     if (this.state.name) {
       return (
         <div className="poll">
@@ -113,6 +112,8 @@ class TakePoll extends RCVComponent {
             disabled={this.isValid() ? "" : "disabled"}
             onClick={this.submitPoll.bind(this)}
           >Submit</button>
+          <p className="divider">– or –</p>
+          <a className="viewResults" href={'/' + this.props.pollId + '/results'}>View Results Without Taking Poll</a>
         </div>
       )
     }

@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import CreatePoll from './components/CreatePoll/CreatePoll';
+import SharePoll from './components/SharePoll/SharePoll';
 import TakePoll from './components/TakePoll/TakePoll';
 import PollResults from './components/PollResults/PollResults';
 import * as serviceWorker from './serviceWorker';
@@ -38,6 +39,7 @@ class App extends React.Component {
           <Locations>
             <Location path="/" setLoading={setLoading} handler={CreatePoll} />
             <Location path="/:pollId" setLoading={setLoading} handler={TakePoll} />
+            <Location path="/:pollId/share" setLoading={setLoading} handler={SharePoll} />
             <Location path="/:pollId/results" setLoading={setLoading} handler={PollResults} />
           </Locations>
           <footer><a href="https://drewag.me">Created by Drewag</a></footer>

@@ -59,7 +59,7 @@ class CreatePoll extends RCVComponent {
       .then(response => response.json())
       .then(json => {
         this.stopLoading();
-        const url = "/" + json.id;
+        const url = "/" + json.id + "/share";
         window.location.href = url;
       });
 

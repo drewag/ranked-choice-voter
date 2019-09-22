@@ -1,0 +1,18 @@
+.share-poll table th, .share-poll table td {
+  padding:0.5em;
+  padding-left:0;
+}
+
+.share-poll table th {
+  text-align:left;
+}
+
+.share-poll .link {
+  display:block;
+  text-align:center;
+  background-color:#FF5627;
+  border:1px solid #D84511;
+  padding:0.6em;
+  color:white;
+  text-decoration:none;
+}

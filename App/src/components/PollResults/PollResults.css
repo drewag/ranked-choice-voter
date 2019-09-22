@@ -6,12 +6,6 @@
   text-align:center;
 }
 
-.results p {
-  text-align:left;
-  margin-left:0;
-  margin-right:0;
-}
-
 .results table {
   width:100%;
   border-collapse:collapse;

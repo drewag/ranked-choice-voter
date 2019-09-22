@@ -121,9 +121,7 @@ body, html {
 }
 
 .app p {
-  margin:0.5em 1.5em;
-  margin-top:0;
-  text-align:center;
+  margin:1em 0;
   font-size:14px;
   line-height:1.2em;
 }
@@ -146,6 +144,7 @@ body, html {
   color:white;
   padding:0.5em;
   margin-top:0.5em;
+  text-align:center;
 }
 
 .app input, .app textarea, .app button.submit {
@@ -168,6 +167,10 @@ body, html {
 
 .app button:disabled, input[type="submit"]:disabled {
   cursor:default;
+}
+
+.app a {
+  color:#FF5627;
 }
 
 .app input[type="submit"], .app button.submit {
