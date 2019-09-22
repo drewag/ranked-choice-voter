@@ -1,0 +1,11 @@
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
+Generated/
+Generated-working/
+*.swp
+*.swo
+tmp/
+Package.resolved
+*.xcuserdatad/
