@@ -11,16 +11,16 @@ var Locations = Router.Locations
 var Location = Router.Location
 
 ReactDOM.render(
-  <div className="App">
-    <header className="App-header">
-      <h1>RCV</h1>
-      <p>Ranked Choice Voter</p>
+  <div className="app">
+    <header>
+      <img alt="RCV - Ranked Choice Voter" src="/img/logo.png" width="200" />
     </header>
     <Locations>
       <Location path="/" handler={CreatePoll} />
       <Location path="/:pollId" handler={TakePoll} />
       <Location path="/:pollId/results" handler={PollResults} />
     </Locations>
+    <footer><a href="https://drewag.me">Created by Drewag</a></footer>
   </div>
   , document.getElementById('root')
 );

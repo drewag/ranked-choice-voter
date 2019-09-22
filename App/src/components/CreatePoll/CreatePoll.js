@@ -11,6 +11,13 @@ class CreatePoll extends React.Component {
     };
   }
 
+  nonEmptyChoices() {
+    return this.state.choices.filter(choice => choice.length > 0);
+  }
+
+  isValid() {
+    return this.nonEmptyChoices().length >= 3 && this.state.name.length > 0
+  }
 
   changeHandler = event => {
     const name = event.target.name;
@@ -36,7 +43,7 @@ class CreatePoll extends React.Component {
   }
 
   submitHandler = event => {
-    let finalChoices = this.state.choices.filter(choice => choice.length > 0);
+    let finalChoices = this.nonEmptyChoices();
     const input = {
       name: this.state.name,
       details: this.state.details,
@@ -60,6 +67,7 @@ class CreatePoll extends React.Component {
     return (
       <form id="createPoll" onSubmit={this.submitHandler}>
         <h1>Create a Poll</h1>
+        <p>Start your own poll to help make a group decision with fixed choices.</p>
         <label>Name</label>
         <input type="text"
           name="name"
@@ -67,28 +75,26 @@ class CreatePoll extends React.Component {
           onChange={this.changeHandler}
         />
 
-        <label>Details</label>
+        <label>Details (optional)</label>
         <textarea
           name="details"
+          placeholder="Extra details to help people rank the available choices."
           value={this.state.details}
           onChange={this.changeHandler}
         />
 
-        <p>Choices</p>
+        <label>Choices (minimum of 3)</label>
           {this.state.choices.map((choice, i) => (
-            <div className="choice">
-              <label>{i + 1}</label>
-              <input
-                type="text"
-                name={i}
-                value={choice}
-                onChange={this.choiceChangeHandler}
-                placeholder="Add Another Choice"
-              />
-            </div>
-          ))};
+            <input
+              type="text"
+              name={i}
+              value={choice}
+              onChange={this.choiceChangeHandler}
+              placeholder="Add a choice"
+            />
+          ))}
 
-        <input type="submit" />
+          <input disabled={this.isValid() ? "" : "disabled"} type="submit" value="Create" />
       </form>
     );
   }

@@ -1,6 +1,9 @@
 import React from 'react';
 import update from 'immutability-helper';
 const arrayMove = require('array-move');
+var Sortable = require('react-sortable-hoc');
+var SortableContainer = Sortable.SortableContainer;
+var SortableElement = Sortable.SortableElement;
 
 class TakePoll extends React.Component {
   constructor(props) {
@@ -28,34 +31,50 @@ class TakePoll extends React.Component {
     this.moveChoice(index, index + 1);
   }
 
+  makeChoice = event => {
+    const index = event.target.dataset.index;
+    var availableChoices = this.state.availableChoices.slice();
+    var choice = availableChoices.splice(index, 1)[0];
+    var rankings = this.state.rankings.slice();
+    rankings.push(choice);
+    this.setState({
+      availableChoices: availableChoices,
+      rankings: rankings,
+    });
+  }
+
   render() {
+    console.log(this.state.rankings);
     if (this.state.poll) {
       if (this.state.poll.name) {
+        let rankings;
+        if (this.state.rankings.length > 0) {
+          rankings = (
+            <div>
+              <label>Rankings</label>
+              <ul>
+                {this.state.rankings.map((choice, i) =>
+                  <li key={choice.id}>{i + 1}: {choice.name}</li>
+                )}
+              </ul>
+            </div>
+          )
+        }
         return (
           <div className="poll">
-            <h1>{this.state.poll.name}</h1>
-            <p>{this.state.poll.details}</p>
+            <h1>{this.state.name}</h1>
+            <p>{this.state.details}</p>
+            <label>Choices</label>
+            <p>Choose your preferences in order.</p>
             <ul>
-              {this.state.poll.choices.map((choice, i) => {
-                let upControl;
-                let downControl;
-                if (i > 0) {
-                  upControl = <button
-                    data-index={i}
-                    onClick={this.moveUpHandler}
-                  >{'\u2b06'}</button>
-                }
-                if (i < this.state.poll.choices.length - 1) {
-                  downControl = <button
-                    data-index={i}
-                    onClick={this.moveDownHandler}
-                  >{'\u2b07'}</button>
-                }
-                return (
-                  <li key={choice.id}>{upControl}{downControl} {i + 1}: {choice.name}</li>
-                )
-              })}
+              {this.state.availableChoices.map((choice, i) =>
+                <li key={choice.id}><button
+                  data-index={i}
+                  onClick={this.makeChoice}
+                >{choice.name}</button></li>
+              )}
             </ul>
+            {rankings}
 
             <button onClick={this.submitPoll.bind(this)}>Submit</button>
           </div>
@@ -90,7 +109,15 @@ class TakePoll extends React.Component {
   loadPoll() {
     fetch(this.generateURL())
       .then(response => response.json())
-      .then(json => this.setState({poll: json}));
+      .then(json => {
+        this.setState({
+          name: json.name,
+          details: json.details,
+          availableChoices: json.choices,
+          rankings: [],
+          poll: json
+        })
+      });
   }
 
   submitPoll() {
