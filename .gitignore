@@ -9,3 +9,4 @@ Generated-working/
 tmp/
 Package.resolved
 *.xcuserdatad/
+Config/
