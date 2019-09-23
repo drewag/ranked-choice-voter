@@ -34,7 +34,9 @@ class App extends React.Component {
         text={this.state.loadingText}
       >
           <header>
-            <img alt="RCV - Ranked Choice Voter" src="/img/logo.png" width="200" />
+            <a href="/">
+              <img alt="RCV - Ranked Choice Voter" src="/img/logo.png" width="200" />
+            </a>
           </header>
           <Locations>
             <Location path="/" setLoading={setLoading} handler={CreatePoll} />

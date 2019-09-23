@@ -14,8 +14,7 @@ class PollResults extends RCVComponent {
       return (
         <div className="results">
           <h1>Results for “{this.state.pollName}”</h1>
-          <Winner choice={this.state.result.rankings[0]} />
-          <FullRanking rankings={this.state.result.rankings} />
+          <Winners choices={this.state.result.winners} />
           <Breakdown rounds={this.state.result.rounds} />
         </div>
       )
@@ -75,27 +74,22 @@ class PollResults extends RCVComponent {
   }
 }
 
-function Winner(props) {
+function Winners(props) {
+  if (props.choices.length == 1) {
+    return (
+      <div className="winner">
+        <h2>Current Winner</h2>
+        <p className="choice">{props.choices[0]}</p>
+      </div>
+    )
+  }
   return (
     <div className="winner">
-      <h2>Current Winner</h2>
-      <p className="choice">{props.choice}</p>
-    </div>
-  )
-}
-
-function FullRanking(props) {
-  return (
-    <div className="full-ranking">
-      <h2>Full Ranking</h2>
-      <table><tbody>
-      {props.rankings.map((choice, index) =>
-        <tr>
-          <td className="rank">{index + 1}</td>
-          <td>{choice}</td>
-        </tr>
+      <h2>Current Winners</h2>
+      <p>These choices are currently tied.</p>
+      {props.choices.map((choice, index) =>
+        <p className="choice">{choice}</p>
       )}
-      </tbody></table>
     </div>
   )
 }

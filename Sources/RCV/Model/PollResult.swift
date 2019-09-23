@@ -9,7 +9,7 @@ import Foundation
 import Swiftlier
 
 struct PollResult: Codable {
-    let rankings: [String]
+    let winners: [String]
     let rounds: [PollRound]
 
     init(choices: [PollChoice], answers: [PollAnswer]) throws {
@@ -19,6 +19,7 @@ struct PollResult: Codable {
         }
 
         var rounds = [PollRound]()
+        var previouslyRemovedChoices = [String]()
 
         while !activeChoices.isEmpty {
             // Tally votes
@@ -34,20 +35,31 @@ struct PollResult: Codable {
                 }
             }
 
-            let tallies = activeChoices.values
-                .map({ (choice, count) in
-                    return PollRound.Tally(choice: choice.name, choiceId: choice.id, count: count)
-                })
-                .sorted(by: {$0.count > $1.count})
-            let round = PollRound(tallies: tallies)
+            var rank = 0
+            var previousScore: Int? = nil
+            var tallies = [PollRound.Tally]()
+            for (choice, count) in activeChoices.values.sorted(by: {$0.1 > $1.1}) {
+                if count != previousScore {
+                    rank += 1
+                }
+                tallies.append(PollRound.Tally(
+                    choice: choice.name,
+                    choiceId: choice.id,
+                    count: count,
+                    rank: rank
+                ))
+                previousScore = count
+            }
+            let round = PollRound(tallies: tallies, previouslyRemovedChoices: previouslyRemovedChoices)
             rounds.append(round)
 
-            if let loser = round.loser {
+            for loser in round.losers {
                 activeChoices[loser.choiceId] = nil
             }
+            previouslyRemovedChoices = round.losers.map({$0.choice})
         }
 
-        self.rankings = rounds.map({$0.tallies.last?.choice ?? "No Choice"}).reversed()
         self.rounds = rounds
+        self.winners = (rounds.last?.winners ?? []).map({$0.choice})
     }
 }
