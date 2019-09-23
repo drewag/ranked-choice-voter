@@ -1,7 +1,12 @@
 import React from 'react';
-import RCVComponent from '../RCVComponent.js';
+
 import './CreatePoll.css';
-import API from '../../API.js'
+
+import API from '../../API.js';
+import RCVComponent from '../RCVComponent.js';
+
+import Help from './Help.js';
+import PastPolls from './PastPolls.js';
 
 class CreatePoll extends RCVComponent {
   constructor(props) {
@@ -64,7 +69,7 @@ class CreatePoll extends RCVComponent {
   // Remote State
 
   submitHandler = event => {
-    this.startLoading("Creating Poll...");
+    this.startLoading('Creating Poll...');
     let finalChoices = this.nonEmptyChoices();
     const input = {
       name: this.state.name,
@@ -87,7 +92,7 @@ class CreatePoll extends RCVComponent {
         this.stopLoading();
         if (json) {
           this.addPoll(json.id, this.state.name);
-          const url = "/" + json.id + "/share";
+          const url = `/${json.id}/share`;
           window.location.href = url;
         }
       });
@@ -131,7 +136,7 @@ class CreatePoll extends RCVComponent {
             ))}
 
             <input
-              disabled={this.isValid() ? "" : "disabled"}
+              disabled={this.isValid() ? null : 'disabled'}
               type="submit"
               value="Create Poll"
             />
@@ -141,49 +146,6 @@ class CreatePoll extends RCVComponent {
       </div>
     );
   }
-}
-
-function PastPolls(props) {
-  const polls = props.polls;
-  if (polls.length === 0) {
-    return null;
-  }
-
-  return (
-      <div className="past-polls">
-        <h2>Your Past Polls</h2>
-        <p>These are polls you've created in the past.</p>
-        <ul>
-          {polls.map((poll, index) => {
-            return (
-              <li><a href={"/" + poll.id + "/share"}>{poll.name}</a></li>
-            )
-          })}
-        </ul>
-        <p>This history is stored on your computer. <strong>Don't rely on it to keep track of your past polls.</strong></p>
-      </div>
-  )
-}
-
-function Help(props) {
-  return (
-    <div className="help">
-      <h2>What is Ranked Choice Voting</h2>
-      <p><a href="https://www.fairvote.org/rcv">Ranked choice voting</a>, also referred to as
-        Instant Runoff Voting, is a method of tallying votes that ensures the winner has a
-        majority of the votes.
-      </p>
-      <p>
-          Each voter ranks their choices in the order they prefer. If their top choice cannot
-          possibly win, their vote then goes to their next highest preference. This allows
-          voters to vote for their favorite choices without worrying about “throwing their
-          vote away” and generally allows finding the winner with the largest consensus.
-      </p>
-      <p>
-          It works best when there are more voters than options.
-      </p>
-    </div>
-  )
 }
 
 export default CreatePoll;

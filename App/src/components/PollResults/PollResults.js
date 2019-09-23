@@ -1,12 +1,19 @@
 import React from 'react';
+
 import './PollResults.css';
-import RCVComponent from '../RCVComponent.js';
+
 import API from '../../API.js'
+import RCVComponent from '../RCVComponent.js';
+
+import Winners from './Winners.js';
+import Breakdown from './Breakdown.js';
 
 class PollResults extends RCVComponent {
   constructor(props) {
     super(props);
     this.state = {
+      pollName: null,
+      result: null,
     };
   }
 
@@ -43,18 +50,18 @@ class PollResults extends RCVComponent {
   }
 
   generateURL() {
-    return API('polls/' + this.props.pollId + "/results")
+    return API('polls', this.props.pollId, 'results')
   }
 
   loadResults() {
     if (this.isLoading) {
       return;
     }
-    this.startLoading("Loading Poll Results...");
+    this.startLoading('Loading Poll Results...');
     fetch(this.generateURL())
       .then(response => {
         if (response.status === 404) {
-          return "notFound";
+          return RCVComponent.NotFound;
         }
         else {
           return response.json()
@@ -73,65 +80,6 @@ class PollResults extends RCVComponent {
         }
       });
   }
-}
-
-function Winners(props) {
-  if (props.choices.length === 1) {
-    return (
-      <div className="winner">
-        <h2>Current Winner</h2>
-        <p className="choice">{props.choices[0]}</p>
-      </div>
-    )
-  }
-  return (
-    <div className="winner">
-      <h2>Current Winners</h2>
-      <p>These choices are currently tied.</p>
-      {props.choices.map((choice, index) =>
-        <p className="choice">{choice}</p>
-      )}
-    </div>
-  )
-}
-
-function Breakdown(props) {
-  let rounds = props.rounds;
-  rounds.pop();
-  return (
-    <div className="breakdown">
-      <h2>Understanding the Results</h2>
-      <p>Here is a breakdown of how the results were calculated.</p>
-      {rounds.map((round, index) => {
-        let reallocated = null;
-        if (index > 0) {
-          const tallies = props.rounds[index - 1].tallies;
-          const previousLoser = tallies[tallies.length - 1].choice;
-          reallocated = <p>Any votes for “{previousLoser}” were thrown since it was in last place. Then, the next priority vote for anyone who voted for it, was used on the remaining choices.</p>
-        }
-        else {
-          reallocated = <p>For the first round, everyone's first choice was tallied.</p>
-        }
-        return (
-          <div className="round">
-            <h3>Round {index + 1}</h3>
-            {reallocated}
-            <table className="round"><tbody>
-              <tr><th>choice</th><th>vote(s)</th></tr>
-              {round.tallies.map((tally, index) => {
-                return (
-                  <tr>
-                    <td>{tally.choice}</td>
-                    <td className="count">{tally.count}</td>
-                  </tr>
-                )
-              })}
-            </tbody></table>
-          </div>
-        )
-      })}
-    </div>
-  )
 }
 
 export default PollResults;

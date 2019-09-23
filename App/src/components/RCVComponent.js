@@ -12,7 +12,7 @@ class RCVComponent extends React.Component {
   }
 
   handleLoadingError(json) {
-    if (json === "notFound") {
+    if (json === RCVComponent.NotFound) {
       this.setState({notFound:true})
     }
     else if (json.title && json.alertMessage) {
@@ -20,8 +20,8 @@ class RCVComponent extends React.Component {
     }
     else {
       this.setState({error:{
-        title: "Error Loading",
-        alertMessage: "Unknown error.",
+        title: 'Error Loading',
+        alertMessage: 'Unknown error.',
       }})
     }
   }
@@ -29,13 +29,15 @@ class RCVComponent extends React.Component {
   handleErrorResponse(response) {
     response.json().then(json => {
       if (json.title && json.alertMessage) {
-        alert(json.title + ": " + json.alertMessage);
+        alert(`${json.title}: ${json.alertMessage}`);
       }
       else {
-        alert("Unknown Error");
+        alert('Unknown Error');
       }
     });
   }
 }
+
+RCVComponent.NotFound = 'NotFound';
 
 export default RCVComponent;
