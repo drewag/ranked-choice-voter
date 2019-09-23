@@ -50,8 +50,6 @@ class CreatePoll extends RCVComponent {
   addPoll(id, name) {
     let polls = this.getPastPolls();
     polls.push({id: id, name: name});
-    console.log("new");
-    console.log(polls);
     localStorage.setItem('generated-polls', JSON.stringify(polls));
   }
 
@@ -145,7 +143,6 @@ class CreatePoll extends RCVComponent {
 }
 
 function PastPolls(props) {
-  console.log(props.polls);
   const polls = props.polls;
   if (polls.length === 0) {
     return null;
