@@ -7,7 +7,7 @@
   text-align:left;
 }
 
-.share-poll .link {
+.share-poll .link, .share-poll .danger {
   display:block;
   text-align:center;
   background-color:#FF5627;
@@ -15,4 +15,10 @@
   padding:0.6em;
   color:white;
   text-decoration:none;
+}
+
+.share-poll .danger {
+  background-color:#C90035;
+  border:1px solid #A90028;
+  width:100%;
 }

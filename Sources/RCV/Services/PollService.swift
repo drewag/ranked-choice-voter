@@ -63,6 +63,11 @@ struct PollService {
         let choices = try self.choices(for: poll)
         return try PollResult(choices: choices, answers: answers)
     }
+
+    func clearAnswers(for poll: Poll) throws {
+        let delete = PollAnswer.delete().filtered(PollAnswer.field(.pollId) == poll.id.uuidString)
+        try self.connection.execute(delete)
+    }
 }
 
 private extension PollService {

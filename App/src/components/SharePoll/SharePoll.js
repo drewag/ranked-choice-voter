@@ -68,13 +68,8 @@ class SharePoll extends RCVComponent {
                 <td><a href={"/" + this.props.pollId + "/results"}>View Now</a></td>
               </tr>
           </tbody></table>
-          <h2>Share</h2>
-          <p>
-              To have other people take this poll, you only need to send them the link.
-              Anyone with the link will be able to take the poll.
-          </p>
-          <a className="link" href={"/" + this.props.pollId}>Link (right click to copy)</a>
-          <p>To copy the link, right click on it and select “Copy”</p>
+          <Share pollId={this.props.pollId} />
+          <Reset pollId={this.props.pollId} />
         </div>
       )
     }
@@ -98,6 +93,50 @@ class SharePoll extends RCVComponent {
       this.loadPoll();
       return null
     }
+  }
+}
+
+function Share(props) {
+  return (
+    <div className="share">
+      <h2>Share</h2>
+      <p>
+          To have other people take this poll, you only need to send them the link.
+          Anyone with the link will be able to take the poll.
+      </p>
+      <a className="link" href={"/" + props.pollId}>Link (right click to copy)</a>
+      <p>To copy the link, right click on it and select “Copy”</p>
+    </div>
+  )
+}
+
+class Reset extends React.Component {
+  reset() {
+    if (window.confirm("Are you sure you want to clear the results?\n\nThis cannot be undone!")) {
+      fetch(API('polls/' + this.props.pollId + '/answers'), {
+          method: 'DELETE',
+        })
+        .then(response => {
+          if (response.status === 200) {
+            alert("Results Cleared Successfully");
+            return
+          }
+
+          this.handleErrorResponse(response);
+        })
+    }
+  }
+
+  render() {
+    return (
+      <div className="reset">
+        <h2>Reset Votes</h2>
+        <p>
+            At any point, you can reset all of the existing votes on this poll.
+        </p>
+        <button className="danger" onClick={this.reset.bind(this)}>Reset Votes (this cannot be undone)</button>
+      </div>
+    )
   }
 }
 

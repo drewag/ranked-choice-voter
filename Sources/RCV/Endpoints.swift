@@ -93,5 +93,15 @@ struct GetPollResults: OutEndpoint {
     var path: String {
         return "polls/\(pollId)/results"
     }
+}
 
+struct DeletePollAnswers: EmptyEndpoint {
+    typealias Service = RCV
+
+    let pollId: String
+    static var method = Method.delete
+
+    var path: String {
+        return "polls/\(pollId)/answers"
+    }
 }

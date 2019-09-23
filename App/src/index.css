@@ -38,11 +38,14 @@
     url('/assets/fonts/alegreya-v13-latin-500.svg#Alegreya') format('svg'); /* Legacy iOS */
 }
 
-body, html {
-    margin:0;
+body, html, button {
     font-family: 'Alegreya',Palatino,Palatino Linotype,Palatino LT STD,Book Antiqua,Georgia,serif;
     font-size:14px;
     font-weight:100;
+}
+
+body, html {
+    margin:0;
     background-color:#5B1547;
     background-image:url('/assets/img/background.jpg');
     background-repeat:repeat;

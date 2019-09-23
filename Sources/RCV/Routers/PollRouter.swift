@@ -65,6 +65,19 @@ struct PollRouter: Router {
                 )
                 return (.ok, output)
             }),
+
+            .endpoint(DeletePollAnswers.self, at: "answers", handler: { (request, id: String) in
+                let service = PollService(connection: request.databaseConnection)
+                guard let id = UUID(uuidString: id)
+                    , let (poll, answers) = try service.getPoll(withId: id)
+                    else
+                {
+                    throw SwiftServeError(.notFound, "getting results", reason: "It could not be found.")
+                }
+
+                try service.clearAnswers(for: poll)
+                return .ok
+            }),
         ]),
     ]
 }
