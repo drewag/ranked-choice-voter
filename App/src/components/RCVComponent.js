@@ -12,7 +12,7 @@ class RCVComponent extends React.Component {
   }
 
   handleLoadingError(json) {
-    if (json == "notFound") {
+    if (json === "notFound") {
       this.setState({notFound:true})
     }
     else if (json.title && json.alertMessage) {

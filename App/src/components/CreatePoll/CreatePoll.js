@@ -27,7 +27,7 @@ class CreatePoll extends RCVComponent {
     const name = event.target.name;
     const value = event.target.value;
 
-    let update = new Array();
+    let update = [];
     update[name] = value;
     this.setState(update);
   }
@@ -39,7 +39,7 @@ class CreatePoll extends RCVComponent {
     let choices = this.state.choices.slice();
     choices[index] = value;
 
-    if (choices[choices.length - 1] != '') {
+    if (choices[choices.length - 1] !== '') {
       choices.push('');
     }
 
@@ -78,7 +78,7 @@ class CreatePoll extends RCVComponent {
         body: JSON.stringify(input),
       })
       .then(response => {
-        if (response.status == 201) {
+        if (response.status === 201) {
           return response.json()
         }
 
@@ -146,7 +146,7 @@ class CreatePoll extends RCVComponent {
 function PastPolls(props) {
   console.log(props.polls);
   const polls = props.polls;
-  if (polls.length == 0) {
+  if (polls.length === 0) {
     return null;
   }
 

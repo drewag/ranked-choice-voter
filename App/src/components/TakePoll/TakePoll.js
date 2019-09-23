@@ -1,6 +1,5 @@
 import React from 'react';
 import RCVComponent from '../RCVComponent.js';
-import update from 'immutability-helper';
 import './TakePoll.css';
 const arrayMove = require('array-move');
 var Sortable = require('react-sortable-hoc');
@@ -47,7 +46,7 @@ class TakePoll extends RCVComponent {
     this.startLoading("Loading Poll...");
     fetch(this.generateURL())
       .then(response => {
-        if (response.status == 404) {
+        if (response.status === 404) {
           return "notFound";
         }
         else {
@@ -81,7 +80,7 @@ class TakePoll extends RCVComponent {
       })
       .then(response => {
         this.stopLoading();
-        if (response.status == 201) {
+        if (response.status === 201) {
           window.location.href = "/" + this.props.pollId + "/results";
         }
         else {
@@ -151,7 +150,7 @@ class AvailableChoices extends React.Component {
   }
 
   render() {
-    if (this.state.choices.length == 0) {
+    if (this.state.choices.length === 0) {
       return null;
     }
     return (
@@ -196,7 +195,7 @@ class Rankings extends React.Component {
   }
 
   render() {
-    if (this.state.rankings.length == 0) {
+    if (this.state.rankings.length === 0) {
       return null;
     }
     else {

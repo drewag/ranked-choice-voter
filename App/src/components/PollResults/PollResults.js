@@ -52,7 +52,7 @@ class PollResults extends RCVComponent {
     this.startLoading("Loading Poll Results...");
     fetch(this.generateURL())
       .then(response => {
-        if (response.status == 404) {
+        if (response.status === 404) {
           return "notFound";
         }
         else {
@@ -75,7 +75,7 @@ class PollResults extends RCVComponent {
 }
 
 function Winners(props) {
-  if (props.choices.length == 1) {
+  if (props.choices.length === 1) {
     return (
       <div className="winner">
         <h2>Current Winner</h2>

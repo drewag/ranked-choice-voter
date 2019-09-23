@@ -18,7 +18,7 @@ class SharePoll extends RCVComponent {
     this.startLoading("Loading Poll...");
     fetch(this.generateURL())
       .then(response => {
-        if (response.status == 404) {
+        if (response.status === 404) {
           return "notFound";
         }
         else {
