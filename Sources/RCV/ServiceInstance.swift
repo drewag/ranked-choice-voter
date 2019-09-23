@@ -5,15 +5,7 @@ import SwiftServeKitura
 import Swiftlier
 import SQL
 
-public struct ExtraInfo: Codable {
-    let stripePublicKey: String
-    let stripePrivateKey: String
-
-    enum CodingKeys: String, CodingKey {
-        case stripePublicKey = "Stripe Public Key"
-        case stripePrivateKey = "Stripe Private Key"
-    }
-}
+public struct ExtraInfo: Codable {}
 
 public let ServiceInstance = SwiftServeInstance<KituraServer, ExtraInfo>(
     domain: "rcv.drewag.me",
