@@ -1,6 +1,7 @@
 import React from 'react';
 import RCVComponent from '../RCVComponent.js';
 import './SharePoll.css'
+import API from '../../API.js'
 
 class SharePoll extends RCVComponent {
   state = {};
@@ -8,7 +9,7 @@ class SharePoll extends RCVComponent {
   // Remote State
 
   generateURL() {
-    return 'http://localhost:8080/api/v1/polls/' + this.props.pollId
+    return API('polls/' + this.props.pollId);
   }
 
   loadPoll() {

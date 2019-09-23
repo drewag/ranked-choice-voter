@@ -1,6 +1,7 @@
 import React from 'react';
 import RCVComponent from '../RCVComponent.js';
 import './TakePoll.css';
+import API from '../../API.js'
 const arrayMove = require('array-move');
 var Sortable = require('react-sortable-hoc');
 var SortableContainer = Sortable.SortableContainer;
@@ -36,7 +37,7 @@ class TakePoll extends RCVComponent {
   // Remote State
 
   generateURL() {
-    return 'http://localhost:8080/api/v1/polls/' + this.props.pollId
+    return API('polls/' + this.props.pollId)
   }
 
   loadPoll() {

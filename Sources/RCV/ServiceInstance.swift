@@ -17,6 +17,7 @@ public struct ExtraInfo: Codable {
 
 public let ServiceInstance = SwiftServeInstance<KituraServer, ExtraInfo>(
     domain: "rcv.drewag.me",
+    dataDirectories: ["App/build"],
     assetsEnabled: true,
     webConfiguration: .init(viewSubdirectory: ""),
     allowCrossOriginRequests: true,
@@ -27,5 +28,6 @@ public let ServiceInstance = SwiftServeInstance<KituraServer, ExtraInfo>(
     ],
     routes: [
         .any("api", router: APIRouter()),
+        .any(router: AppRouter()),
     ]
 )

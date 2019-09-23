@@ -1,6 +1,7 @@
 import React from 'react';
 import RCVComponent from '../RCVComponent.js';
 import './CreatePoll.css';
+import API from '../../API.js'
 
 class CreatePoll extends RCVComponent {
   constructor(props) {
@@ -73,7 +74,7 @@ class CreatePoll extends RCVComponent {
       choices: finalChoices,
     }
 
-    fetch('http://localhost:8080/api/v1/polls', {
+    fetch(API('polls'), {
         method: 'POST',
         body: JSON.stringify(input),
       })

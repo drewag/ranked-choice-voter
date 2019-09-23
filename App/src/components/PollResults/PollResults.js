@@ -1,6 +1,7 @@
 import React from 'react';
 import './PollResults.css';
 import RCVComponent from '../RCVComponent.js';
+import API from '../../API.js'
 
 class PollResults extends RCVComponent {
   constructor(props) {
@@ -42,7 +43,7 @@ class PollResults extends RCVComponent {
   }
 
   generateURL() {
-    return 'http://localhost:8080/api/v1/polls/' + this.props.pollId + "/results"
+    return API('polls/' + this.props.pollId + "/results")
   }
 
   loadResults() {
