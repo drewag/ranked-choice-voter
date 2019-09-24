@@ -1,5 +1,7 @@
+import {useCallback} from 'react';
+
 const useErrorHandling = () => {
-  return (response) => {
+  return useCallback((response) => {
     response.json().then(json => {
       if (json.title && json.alertMessage) {
         alert(`${json.title}: ${json.alertMessage}`);
@@ -8,7 +10,7 @@ const useErrorHandling = () => {
         alert('Unknown Error');
       }
     });
-  }
+  }, []);
 }
 
 export default useErrorHandling;

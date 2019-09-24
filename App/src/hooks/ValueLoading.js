@@ -1,40 +1,45 @@
-import React, {useState, useEffect} from 'react';
-
-import API from '../API.js';
+import {useState, useEffect} from 'react';
 
 import useLoading from './Loading.js';
 
+const NotFound = new Error();
+
 const useValueLoading = (props, endpoint, name, validate, onLoaded) => {
   const [value, setValue] = useState();
-  const [startLoading, stopLoading] = useLoading(props);
 
-  const loadValue = async () => {
+  const [startLoading, stopLoading] = useLoading(props);
+  const setError = props.setError;
+
+  useEffect(() => {
     startLoading(`Loading ${name}...`);
-    const value = await fetch(endpoint)
+    let value = fetch(endpoint)
       .then(response => {
         if (response.status === 404) {
+          throw NotFound;
+        }
+        return response.json();
+      })
+      .then(json => {
+        if (json && validate(json)) {
+          onLoaded && onLoaded(json);
+          stopLoading();
+          return json;
+        }
+        else {
+          throw new Error();
+        }
+      })
+      .catch(error => {
+        stopLoading();
+        if (error === NotFound) {
           return null;
         }
         else {
-          return response.json()
+          setError(error)
         }
       })
-    stopLoading();
-    if (value && validate(value)) {
-      onLoaded && onLoaded(value);
-      setValue(value);
-    }
-    else if (value == null) {
-      setValue(value);
-    }
-    else {
-      throw "this is an error";
-    }
-  }
-
-  useEffect(() => {
-    loadValue();
-  }, []);
+    setValue(value);
+  }, [endpoint, name, startLoading, stopLoading, setError, onLoaded, validate]);
 
   return value;
 }

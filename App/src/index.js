@@ -14,6 +14,7 @@ import PollResults from './components/PollResults/PollResults';
 
 const App = () => {
   const [loadingText, setLoadingText] = useState(null);
+  const [error, setError] = useState(null);
 
   return (
     <LoadingOverlay
@@ -27,12 +28,12 @@ const App = () => {
             <img alt="RCV - Ranked Choice Voter" src="/img/logo.png" width="200" />
           </a>
         </header>
-        <ErrorHandler>
+        <ErrorHandler error={error}>
           <Locations>
-            <Location path="/" setLoading={setLoadingText} handler={CreatePoll} />
-            <Location path="/:pollId" setLoading={setLoadingText} handler={TakePoll} />
-            <Location path="/:pollId/share" setLoading={setLoadingText} handler={SharePoll} />
-            <Location path="/:pollId/results" setLoading={setLoadingText} handler={PollResults} />
+            <Location path="/" setLoading={setLoadingText} setError={setError} handler={CreatePoll} />
+            <Location path="/:pollId" setLoading={setLoadingText} setError={setError} handler={TakePoll} />
+            <Location path="/:pollId/share" setLoading={setLoadingText} setError={setError} handler={SharePoll} />
+            <Location path="/:pollId/results" setLoading={setLoadingText} setError={setError} handler={PollResults} />
           </Locations>
           <footer><a href="https://drewag.me">Created by Drewag</a></footer>
         </ErrorHandler>

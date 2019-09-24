@@ -1,10 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import arrayMove from 'array-move';
-import LoadingOverlay from 'react-loading-overlay';
 
 import './TakePoll.css';
 
-import API from '../../API.js';
 import useLoading from '../../hooks/Loading.js';
 import usePollLoading from '../../hooks/PollLoading.js';
 import useErrorHandling from '../../hooks/ErrorHandling.js';
@@ -64,7 +62,7 @@ const TakePoll = (props) => {
         else {
           handleError(response);
         }
-      })
+      });
   }
 
   // Rendering

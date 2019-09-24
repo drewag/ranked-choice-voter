@@ -1,8 +1,6 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 import './SharePoll.css'
-
-import API from '../../API.js'
 
 import usePollLoading from '../../hooks/PollLoading.js';
 

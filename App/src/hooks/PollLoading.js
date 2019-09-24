@@ -1,18 +1,19 @@
-import React, {useState, useEffect} from 'react';
-
 import API from '../API.js';
+
+import {useCallback} from 'react';
 
 import useValueLoading from './ValueLoading.js';
 
 const usePollLoading = (props, onLoaded) => {
   const endpoint = API('polls/' + props.pollId);
+  const validatePoll = useCallback((poll) => {
+    return poll.name
+  }, [])
   const poll = useValueLoading(
     props,
     endpoint,
     'Polls',
-    (poll) => {
-      return poll.name
-    },
+    validatePoll,
     onLoaded
   )
 

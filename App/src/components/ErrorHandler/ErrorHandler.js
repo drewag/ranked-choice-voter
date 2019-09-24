@@ -4,7 +4,11 @@ class ErrorHandler extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {error: null};
+    this.state = {error: props.error};
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    return {error: props.error}
   }
 
   componentDidCatch(error, info) {
@@ -18,6 +22,14 @@ class ErrorHandler extends React.Component {
           <div className="error">
             <h1>{this.state.error.title}</h1>
             <p>{this.state.error.alertMessage}</p>
+          </div>
+        )
+      }
+      else if (this.state.error.message) {
+        return (
+          <div className="error">
+            <h1>Error Occured</h1>
+            <p>{this.state.error.message}</p>
           </div>
         )
       }

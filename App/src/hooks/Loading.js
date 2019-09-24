@@ -1,3 +1,5 @@
+import {useCallback} from 'react';
+
 const useLoading = (props) => {
   const startLoading = (text) => {
     props.setLoading(text);
@@ -7,7 +9,10 @@ const useLoading = (props) => {
     props.setLoading(null);
   }
 
-  return [startLoading, stopLoading];
+  return [
+    useCallback(startLoading, []),
+    useCallback(stopLoading, []),
+  ];
 }
 
 export default useLoading;
