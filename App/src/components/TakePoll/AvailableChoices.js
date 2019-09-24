@@ -1,8 +1,7 @@
 import React from 'react';
 
-class AvailableChoices extends React.Component {
-  render() {
-    if (this.props.choices.length === 0) {
+const AvailableChoices = (props) => {
+    if (props.choices.length === 0) {
       return null;
     }
     return (
@@ -10,16 +9,15 @@ class AvailableChoices extends React.Component {
         <h2>Choices</h2>
         <p>Choose your first choice out of those remaining.</p>
         <ul>
-          {this.props.choices.map((choice, i) =>
+          {props.choices.map((choice, i) =>
             <li key={choice.id}><button
               data-index={i}
-              onClick={this.props.makeChoice}
+              onClick={props.makeChoice}
             >{choice.name}</button></li>
           )}
         </ul>
       </div>
     )
-  }
 }
 
 export default AvailableChoices;

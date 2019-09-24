@@ -1,79 +1,68 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import './CreatePoll.css';
 
 import API from '../../API.js';
-import RCVComponent from '../RCVComponent.js';
+
+import useLoading from '../../hooks/Loading.js';
+import useErrorHandling from '../../hooks/ErrorHandling.js';
 
 import Help from './Help.js';
 import PastPolls from './PastPolls.js';
 
-class CreatePoll extends RCVComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      details: '',
-      choices: [''],
-    };
-  }
+const CreatePoll = (props) => {
+  // Hooks
+
+  const [name, setName] = useState('');
+  const [details, setDetails] = useState('');
+  const [choices, setChoices] = useState(['']);
+
+  const [startLoading, stopLoading] = useLoading(props);
+  const handleError = useErrorHandling();
 
   // Local state
 
-  nonEmptyChoices() {
-    return this.state.choices.filter(choice => choice.length > 0);
-  }
+  const nonEmptyChoices = choices.filter(choice => choice.length > 0);
+  const isValid = name.length > 0 && nonEmptyChoices.length >= 2;
 
-  isValid() {
-    return this.state.name.length > 0
-      && this.nonEmptyChoices().length >= 2
-  }
-
-  changeHandler = event => {
-    const name = event.target.name;
+  const changeHandler = (setter) => (event) => {
     const value = event.target.value;
-
-    let update = [];
-    update[name] = value;
-    this.setState(update);
+    setter(value);
   }
 
-  choiceChangeHandler = event => {
+  const choiceChangeHandler = event => {
     const index = parseInt(event.target.name);
     const value = event.target.value;
 
-    let choices = this.state.choices.slice();
-    choices[index] = value;
+    let newChoices = choices.slice();
+    newChoices[index] = value;
 
-    if (choices[choices.length - 1] !== '') {
-      choices.push('');
+    if (newChoices[choices.length - 1] !== '') {
+      newChoices.push('');
     }
 
-    this.setState({choices: choices});
+    setChoices(newChoices);
   }
 
-  addPoll(id, name) {
-    let polls = this.getPastPolls();
+  const getPastPolls = () => {
+    const pastPollsJSON = localStorage.getItem('generated-polls');
+    return pastPollsJSON ? JSON.parse(pastPollsJSON) : [];
+  }
+
+  const addPoll = (id, name) => {
+    let polls = getPastPolls();
     polls.push({id: id, name: name});
     localStorage.setItem('generated-polls', JSON.stringify(polls));
   }
 
-  getPastPolls() {
-    const existing = localStorage.getItem('generated-polls');
-    if (existing) {
-      return JSON.parse(existing);
-    }
-    return [];
-  }
-
   // Remote State
 
-  submitHandler = event => {
-    this.startLoading('Creating Poll...');
-    let finalChoices = this.nonEmptyChoices();
+  const submitHandler = event => {
+    startLoading('Creating Poll...');
+    let finalChoices = nonEmptyChoices;
     const input = {
-      name: this.state.name,
-      details: this.state.details,
+      name: name,
+      details: details,
       choices: finalChoices,
     }
 
@@ -86,12 +75,12 @@ class CreatePoll extends RCVComponent {
           return response.json()
         }
 
-        this.handleErrorResponse(response);
+        handleError(response);
       })
       .then(json => {
-        this.stopLoading();
+        stopLoading();
         if (json) {
-          this.addPoll(json.id, this.state.name);
+          addPoll(json.id, name);
           const url = `/${json.id}/share`;
           window.location.href = url;
         }
@@ -102,50 +91,48 @@ class CreatePoll extends RCVComponent {
 
   // Rendering
 
-  render() {
-    return (
-      <div className="create-poll">
-        <form id="createPoll" onSubmit={this.submitHandler}>
-          <h1>Create a Poll</h1>
-          <p>Start your own poll to help make a group decision with fixed choices.</p>
-          <label>Question</label>
-          <input type="text"
-            name="name"
-            placeholder="The question to ask your poll takers"
-            value={this.state.name}
-            onChange={this.changeHandler}
-          />
+  return (
+    <div className="create-poll">
+      <form id="createPoll" onSubmit={submitHandler}>
+        <h1>Create a Poll</h1>
+        <p>Start your own poll to help make a group decision with fixed choices.</p>
+        <label>Question</label>
+        <input type="text"
+          name="name"
+          placeholder="The question to ask your poll takers"
+          value={name}
+          onChange={changeHandler(setName)}
+        />
 
-          <label>Details (optional)</label>
-          <textarea
-            name="details"
-            placeholder="Extra details to help people rank the available choices."
-            value={this.state.details}
-            onChange={this.changeHandler}
-          />
+        <label>Details (optional)</label>
+        <textarea
+          name="details"
+          placeholder="Extra details to help people rank the available choices."
+          value={details}
+          onChange={changeHandler(setDetails)}
+        />
 
-          <label>Choices (minimum of 2)</label>
-            {this.state.choices.map((choice, i) => (
-              <input
-                type="text"
-                name={i}
-                value={choice}
-                onChange={this.choiceChangeHandler}
-                placeholder="Add a choice"
-              />
-            ))}
-
+        <label>Choices (minimum of 2)</label>
+          {choices.map((choice, i) => (
             <input
-              disabled={this.isValid() ? null : 'disabled'}
-              type="submit"
-              value="Create Poll"
+              type="text"
+              name={i}
+              value={choice}
+              onChange={choiceChangeHandler}
+              placeholder="Add a choice"
             />
-        </form>
-        <PastPolls polls={this.getPastPolls()} />
-        <Help />
-      </div>
-    );
-  }
+          ))}
+
+          <input
+            disabled={isValid ? null : 'disabled'}
+            type="submit"
+            value="Create Poll"
+          />
+      </form>
+      <PastPolls polls={getPastPolls()} />
+      <Help />
+    </div>
+  );
 }
 
 export default CreatePoll;

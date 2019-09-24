@@ -2,10 +2,14 @@ import React from 'react';
 
 import API from '../../API.js'
 
-class Reset extends React.Component {
-  reset = () => {
+import useErrorHandling from '../../hooks/ErrorHandling.js';
+
+const Reset = (props) => {
+  const handleError = useErrorHandling();
+
+  const reset = () => {
     if (window.confirm('Are you sure you want to clear the results?\n\nThis cannot be undone!')) {
-      fetch(API(`polls/${this.props.pollId}/answers`), {
+      fetch(API(`polls/${props.pollId}/answers`), {
           method: 'DELETE',
         })
         .then(response => {
@@ -14,20 +18,18 @@ class Reset extends React.Component {
             return
           }
 
-          this.handleErrorResponse(response);
+          handleError(response);
         })
     }
   }
 
-  render() {
-    return (
-      <div className="reset">
-        <h2>Reset Votes</h2>
-        <p>At any point, you can reset all of the existing votes on this poll.</p>
-        <button className="danger" onClick={this.reset}>Reset Votes (this cannot be undone)</button>
-      </div>
-    )
-  }
+  return (
+    <div className="reset">
+      <h2>Reset Votes</h2>
+      <p>At any point, you can reset all of the existing votes on this poll.</p>
+      <button className="danger" onClick={reset}>Reset Votes (this cannot be undone)</button>
+    </div>
+  )
 }
 
 export default Reset;
