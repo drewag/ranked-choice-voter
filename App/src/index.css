@@ -153,7 +153,7 @@ body, html {
 .app input, .app textarea, .app button.submit {
   border-radius:3px;
   border:1px solid #D8D8D8;
-  font-size:14px;
+  font-size:16px;
   padding:0.6em;
   width:calc(100% - 1em - 2px);
   color:#1d1d1d;
@@ -166,6 +166,8 @@ body, html {
 
 .app button, input[type="submit"] {
   cursor:pointer;
+  -moz-appearance: none;
+  -webkit-appearance: none;
 }
 
 .app button:disabled, input[type="submit"]:disabled {
@@ -196,7 +198,6 @@ body, html {
 
 @media all and (max-width:430px) {
   body, html, #root {
-    background-color:transparent;
     height:100%;
   }
 
