@@ -1,17 +1,21 @@
-import {useCallback} from 'react';
+import {useCallback, useContext} from 'react';
 
-const useLoading = (props) => {
-  const startLoading = (text) => {
-    props.setLoading(text);
-  }
+import LoadingContext from '../contexts/LoadingContext';
 
-  const stopLoading = () => {
-    props.setLoading(null);
-  }
+const useLoading = () => {
+  const setLoading = useContext(LoadingContext);
+
+  const startLoading = useCallback((text) => {
+    setLoading(text);
+  }, [setLoading]);
+
+  const stopLoading = useCallback(() => {
+    setLoading(null);
+  }, [setLoading]);
 
   return [
-    useCallback(startLoading, []),
-    useCallback(stopLoading, []),
+    startLoading,
+    stopLoading,
   ];
 }
 

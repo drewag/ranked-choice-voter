@@ -1,17 +1,19 @@
 import React from 'react';
 
+import ErrorContext from '../../contexts/ErrorContext';
+
 class ErrorHandler extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {error: props.error};
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    return {error: props.error}
+    this.state = {error: null};
   }
 
   componentDidCatch(error, info) {
+    this.setState({error:error});
+  }
+
+  setError = (error) => {
     this.setState({error:error});
   }
 
@@ -43,7 +45,11 @@ class ErrorHandler extends React.Component {
       }
     }
 
-    return this.props.children;
+    return (
+      <ErrorContext.Provider value={this.setError}>
+        {this.props.children}
+      </ErrorContext.Provider>
+    )
   }
 }
 

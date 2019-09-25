@@ -5,7 +5,7 @@ import './CreatePoll.css';
 import API from '../../API.js';
 
 import useLoading from '../../hooks/Loading.js';
-import useErrorHandling from '../../hooks/ErrorHandling.js';
+import useAlertError from '../../hooks/AlertError.js';
 
 import Help from './Help.js';
 import PastPolls from './PastPolls.js';
@@ -17,8 +17,8 @@ const CreatePoll = (props) => {
   const [details, setDetails] = useState('');
   const [choices, setChoices] = useState(['']);
 
-  const [startLoading, stopLoading] = useLoading(props);
-  const handleError = useErrorHandling();
+  const [startLoading, stopLoading] = useLoading();
+  const alertError = useAlertError();
 
   // Local state
 
@@ -58,6 +58,8 @@ const CreatePoll = (props) => {
   // Remote State
 
   const submitHandler = event => {
+    event.preventDefault();
+
     startLoading('Creating Poll...');
     let finalChoices = nonEmptyChoices;
     const input = {
@@ -75,18 +77,21 @@ const CreatePoll = (props) => {
           return response.json()
         }
 
-        handleError(response);
+        alertError(response);
       })
       .then(json => {
         stopLoading();
+
         if (json) {
           addPoll(json.id, name);
           const url = `/${json.id}/share`;
           window.location.href = url;
         }
-      });
-
-    event.preventDefault();
+        else {
+          alertError(json);
+        }
+      })
+      .catch(alertError);
   }
 
   // Rendering

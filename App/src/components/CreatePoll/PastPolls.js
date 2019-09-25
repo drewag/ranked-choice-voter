@@ -12,7 +12,7 @@ function PastPolls(props) {
       <ul>
         {polls.map((poll, index) => {
           return (
-            <li><a href={`/${poll.id}/share`}>{poll.name}</a></li>
+            <li key={poll.id}><a href={`/${poll.id}/share`}>{poll.name}</a></li>
           )
         })}
       </ul>

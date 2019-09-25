@@ -2,10 +2,10 @@ import React from 'react';
 
 import API from '../../API.js'
 
-import useErrorHandling from '../../hooks/ErrorHandling.js';
+import useAlertError from '../../hooks/AlertError.js';
 
 const Reset = (props) => {
-  const handleError = useErrorHandling();
+  const alertError = useAlertError();
 
   const reset = () => {
     if (window.confirm('Are you sure you want to clear the results?\n\nThis cannot be undone!')) {
@@ -18,8 +18,9 @@ const Reset = (props) => {
             return
           }
 
-          handleError(response);
+          alertError(response);
         })
+        .catch(alertError);
     }
   }
 

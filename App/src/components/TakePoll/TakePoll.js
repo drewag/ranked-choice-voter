@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import arrayMove from 'array-move';
 
 import './TakePoll.css';
 
 import useLoading from '../../hooks/Loading.js';
 import usePollLoading from '../../hooks/PollLoading.js';
-import useErrorHandling from '../../hooks/ErrorHandling.js';
+import useAlertError from '../../hooks/AlertError.js';
 import AvailableChoices from './AvailableChoices.js';
 
 import Rankings from './Rankings.js';
@@ -14,13 +14,12 @@ const TakePoll = (props) => {
   const [availableChoices, setAvailableChoices] = useState();
   const [rankings, setRankings] = useState();
 
-  const [startLoading, stopLoading] = useLoading(props);
-  const [poll, endpoint] = usePollLoading(props, (loaded) => {
+  const [startLoading, stopLoading] = useLoading();
+  const [poll, endpoint] = usePollLoading(props.pollId, useCallback((loaded) => {
     setAvailableChoices(loaded.choices);
     setRankings([]);
-  });
-
-  const handleError = useErrorHandling();
+  }, []));
+  const alertError = useAlertError();
 
   // Local State
 
@@ -60,9 +59,10 @@ const TakePoll = (props) => {
           window.location.href = `/${props.pollId}/results`;
         }
         else {
-          handleError(response);
+          alertError(response);
         }
-      });
+      })
+      .catch(alertError);
   }
 
   // Rendering

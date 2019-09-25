@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-import LoadingOverlay from 'react-loading-overlay';
 import {Locations, Location} from 'react-router-component';
 
 import './index.css';
 
+import Loadable from './components/Loadable/Loadable';
 import ErrorHandler from './components/ErrorHandler/ErrorHandler';
 import CreatePoll from './components/CreatePoll/CreatePoll';
 import SharePoll from './components/SharePoll/SharePoll';
@@ -13,31 +13,23 @@ import TakePoll from './components/TakePoll/TakePoll';
 import PollResults from './components/PollResults/PollResults';
 
 const App = () => {
-  const [loadingText, setLoadingText] = useState(null);
-  const [error, setError] = useState(null);
-
   return (
-    <LoadingOverlay
-      className="app"
-      active={loadingText != null}
-      spinner
-      text={loadingText}
-    >
+    <Loadable className="app">
         <header>
           <a href="/">
             <img alt="RCV - Ranked Choice Voter" src="/img/logo.png" width="200" />
           </a>
         </header>
-        <ErrorHandler error={error}>
+        <ErrorHandler>
           <Locations>
-            <Location path="/" setLoading={setLoadingText} setError={setError} handler={CreatePoll} />
-            <Location path="/:pollId" setLoading={setLoadingText} setError={setError} handler={TakePoll} />
-            <Location path="/:pollId/share" setLoading={setLoadingText} setError={setError} handler={SharePoll} />
-            <Location path="/:pollId/results" setLoading={setLoadingText} setError={setError} handler={PollResults} />
+            <Location path="/" handler={CreatePoll} />
+            <Location path="/:pollId" handler={TakePoll} />
+            <Location path="/:pollId/share" handler={SharePoll} />
+            <Location path="/:pollId/results" handler={PollResults} />
           </Locations>
           <footer><a href="https://drewag.me">Created by Drewag</a></footer>
         </ErrorHandler>
-    </LoadingOverlay>
+    </Loadable>
   )
 }
 

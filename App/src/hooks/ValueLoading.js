@@ -1,45 +1,52 @@
 import {useState, useEffect} from 'react';
 
 import useLoading from './Loading.js';
+import useDisplayError from './DisplayError.js';
 
 const NotFound = new Error();
 
-const useValueLoading = (props, endpoint, name, validate, onLoaded) => {
+const useValueLoading = (endpoint, name, validate, onLoaded) => {
   const [value, setValue] = useState();
 
-  const [startLoading, stopLoading] = useLoading(props);
-  const setError = props.setError;
+  const [startLoading, stopLoading] = useLoading();
+  const displayError = useDisplayError();
 
   useEffect(() => {
-    startLoading(`Loading ${name}...`);
-    let value = fetch(endpoint)
-      .then(response => {
-        if (response.status === 404) {
-          throw NotFound;
-        }
-        return response.json();
-      })
-      .then(json => {
-        if (json && validate(json)) {
-          onLoaded && onLoaded(json);
+    const fetchValue = async () => {
+      startLoading(`Loading ${name}...`);
+      let value = await fetch(endpoint)
+        .then(response => {
+          if (response.status === 404) {
+            throw NotFound;
+          }
+          return response.json();
+        })
+        .then(json => {
           stopLoading();
-          return json;
-        }
-        else {
-          throw new Error();
-        }
-      })
-      .catch(error => {
-        stopLoading();
-        if (error === NotFound) {
-          return null;
-        }
-        else {
-          setError(error)
-        }
-      })
-    setValue(value);
-  }, [endpoint, name, startLoading, stopLoading, setError, onLoaded, validate]);
+          if (json && validate(json)) {
+            onLoaded && onLoaded(json);
+            return json;
+          }
+          else {
+            displayError(json);
+            return
+          }
+        })
+        .catch(error => {
+          stopLoading();
+          if (error === NotFound) {
+            return null;
+          }
+          else {
+            displayError(error)
+          }
+        })
+      if (value) {
+        setValue(value);
+      }
+    }
+    fetchValue();
+  }, [endpoint, name, startLoading, stopLoading, displayError, onLoaded, validate]);
 
   return value;
 }

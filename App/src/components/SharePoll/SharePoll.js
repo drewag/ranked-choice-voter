@@ -8,7 +8,7 @@ import Instructions from './Instructions.js';
 import Reset from './Reset.js';
 
 const SharePoll = (props) => {
-  const [poll] = usePollLoading(props);
+  const [poll] = usePollLoading(props.pollId);
 
   // Rendering
 

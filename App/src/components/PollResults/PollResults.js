@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import './PollResults.css';
 
@@ -14,12 +14,11 @@ const PollResults = (props) => {
 
   const endpoint = API('polls', props.pollId, 'results');
   const results = useValueLoading(
-    props,
     endpoint,
     'Results',
-    (results) => {
+    useCallback((results) => {
       return results.result && results.pollName
-    }
+    }, [])
   )
 
   // Rendering
