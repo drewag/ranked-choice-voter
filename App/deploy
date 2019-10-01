@@ -1,0 +1,3 @@
+#!/bin/bash
+
+npm run build && rsync -avz build rvc.drewag.me:/var/www/rcv.drewag.me/App/
