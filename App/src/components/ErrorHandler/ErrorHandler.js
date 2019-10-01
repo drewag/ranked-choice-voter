@@ -18,31 +18,28 @@ class ErrorHandler extends React.Component {
   }
 
   render() {
+    let title;
+    let message;
     if (this.state.error) {
       if (this.state.error.title && this.state.error.alertMessage) {
-        return (
-          <div className="error">
-            <h1>{this.state.error.title}</h1>
-            <p>{this.state.error.alertMessage}</p>
-          </div>
-        )
+        title = this.state.error.title;
+        message = this.state.error.alertMessage;
       }
       else if (this.state.error.message) {
-        return (
-          <div className="error">
-            <h1>Error Occured</h1>
-            <p>{this.state.error.message}</p>
-          </div>
-        )
+        title = 'Error Occurred';
+        message = this.state.error.message;
       }
       else {
-        return (
-          <div className="error">
-            <h1>Unknown Error</h1>
-            <p>The reason for this error could not be determined.</p>
-          </div>
-        )
+        title = 'Unknown Error';
+        message = 'The reason for this error could not be determined.';
       }
+
+      return (
+        <div className="error">
+          <h1>{title}</h1>
+          <p>{message}</p>
+        </div>
+      )
     }
 
     return (
